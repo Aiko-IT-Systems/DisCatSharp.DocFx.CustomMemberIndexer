@@ -157,6 +157,9 @@ namespace HSNXT.DocFx.AliasGenerator
                         case "constructors":
                             itemType = "Constructor";
                             break;
+                        case "eii":
+                            itemType = "Explicit Interface Implementation";
+                            break;
                         default:
                             throw new InvalidOperationException($"Unknown item type {sibling.Id}");
                     }
