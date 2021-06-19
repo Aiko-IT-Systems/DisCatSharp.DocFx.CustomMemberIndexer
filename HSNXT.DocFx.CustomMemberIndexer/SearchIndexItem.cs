@@ -1,7 +1,7 @@
 ﻿using CsQuery.ExtensionMethods.Xml;
 using Newtonsoft.Json;
 
-namespace HSNXT.DocFx.AliasGenerator
+namespace HSNXT.DocFx.CustomMemberIndexer
 {
     public class SearchIndexItem
     {
