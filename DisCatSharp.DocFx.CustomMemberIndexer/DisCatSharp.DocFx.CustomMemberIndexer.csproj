@@ -3,8 +3,8 @@
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
         <NoWarn>NU1605</NoWarn>
-        <AssemblyName>HSNXT.DocFx.CustomMemberIndexer</AssemblyName>
-        <RootNamespace>HSNXT.DocFx.CustomMemberIndexer</RootNamespace>
+        <AssemblyName>DisCatSharp.DocFx.CustomMemberIndexer</AssemblyName>
+        <RootNamespace>DisCatSharp.DocFx.CustomMemberIndexer</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -13,11 +13,5 @@
       <PackageReference Include="Microsoft.DocAsCode.Common" Version="2.58.0" />
       <PackageReference Include="Microsoft.DocAsCode.Plugins" Version="2.58.0" />
     </ItemGroup>
-
-    <!--<ItemGroup>-->
-      <!--<Reference Include="System.Collections.Immutable, Version=1.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">-->
-        <!--<HintPath>System.Collections.Immutable.dll</HintPath>-->
-      <!--</Reference>-->
-    <!--</ItemGroup>-->
 
 </Project>

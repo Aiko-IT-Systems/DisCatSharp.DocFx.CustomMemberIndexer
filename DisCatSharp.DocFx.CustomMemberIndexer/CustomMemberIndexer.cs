@@ -11,7 +11,7 @@ using Microsoft.DocAsCode.Common;
 using Microsoft.DocAsCode.Plugins;
 using Newtonsoft.Json;
 
-namespace HSNXT.DocFx.CustomMemberIndexer
+namespace DisCatSharp.DocFx.CustomMemberIndexer
 {
     [Export(nameof(CustomMemberIndexer), typeof(IPostProcessor))]
     public class CustomMemberIndexer : IPostProcessor

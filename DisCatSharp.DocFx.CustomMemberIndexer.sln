@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HSNXT.DocFx.CustomMemberIndexer", "HSNXT.DocFx.CustomMemberIndexer\HSNXT.DocFx.CustomMemberIndexer.csproj", "{47B59F93-2781-4264-BC74-79B2A597FC30}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DisCatSharp.DocFx.CustomMemberIndexer", "DisCatSharp.DocFx.CustomMemberIndexer\DisCatSharp.DocFx.CustomMemberIndexer.csproj", "{47B59F93-2781-4264-BC74-79B2A597FC30}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
