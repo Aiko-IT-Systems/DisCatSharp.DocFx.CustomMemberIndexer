@@ -13,18 +13,33 @@ using Newtonsoft.Json;
 
 namespace DisCatSharp.DocFx.CustomMemberIndexer
 {
+    /// <summary>
+    /// The custom member indexer.
+    /// </summary>
     [Export(nameof(CustomMemberIndexer), typeof(IPostProcessor))]
     public class CustomMemberIndexer : IPostProcessor
     {
+        /// <summary>
+        /// The index file name.
+        /// </summary>
         public const string IndexFileName = "index.json";
-        
+
+        /// <summary>
+        /// Prepares the metadata.
+        /// </summary>
+        /// <param name="metadata">The metadata.</param>
+        /// <returns>An <see cref="ImmutableDictionary"/>.</returns>
         public ImmutableDictionary<string, object> PrepareMetadata(ImmutableDictionary<string, object> metadata) 
             => metadata;
 
+        /// <summary>
+        /// Processes the manifest.
+        /// </summary>
+        /// <param name="manifest">The manifest.</param>
+        /// <param name="outputFolder">The output folder.</param>
+        /// <returns>A <see cref="Manifest"/>.</returns>
         public Manifest Process(Manifest manifest, string outputFolder)
         {
-            //Console.WriteLine(JsonConvert.SerializeObject(manifest, Formatting.Indented));
-
             var indexDataFilePath = Path.Combine(outputFolder, IndexFileName);
             
             var indexData = JsonUtility.Deserialize<Dictionary<string, SearchIndexItem>>(indexDataFilePath);
@@ -49,7 +64,7 @@ namespace DisCatSharp.DocFx.CustomMemberIndexer
                 }
 
                 var summaryElement = cq["h1 + div.summary"].FirstOrDefault();
-                if (summaryElement != null) // the Count operation uses an enumerable underneath so let's avoid it
+                if (summaryElement != null)
                 {
                     item.Summary = summaryElement.TextContent;
                 }
@@ -67,11 +82,10 @@ namespace DisCatSharp.DocFx.CustomMemberIndexer
                 return manifest;
             }
 
-            Console.WriteLine($"[D#+] Extracting method index data from {htmlFiles.Length} html files");
+            Console.WriteLine($"[DC#] Extracting method index data from {htmlFiles.Length} html files");
             foreach (var relativePath in htmlFiles)
             {
                 var filePath = Path.Combine(outputFolder, relativePath);
-                //Logger.LogDiagnostic($"Extracting index data from {filePath}");
 
                 CQ cq;
                 
@@ -86,7 +100,7 @@ namespace DisCatSharp.DocFx.CustomMemberIndexer
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"[D#+] Warning: Can't load content from {filePath}: {ex.Message}");
+                    Console.WriteLine($"[DC#] Warning: Can't load content from {filePath}: {ex.Message}");
                     continue;
                 }
                 var indexItems = ExtractItem(cq, relativePath);
@@ -102,6 +116,12 @@ namespace DisCatSharp.DocFx.CustomMemberIndexer
         
         private static readonly Regex AllWords = new Regex(@"\w+", RegexOptions.Compiled);
 
+        /// <summary>
+        /// Extracts the item.
+        /// </summary>
+        /// <param name="cq">The cq.</param>
+        /// <param name="relativePath">The relative path.</param>
+        /// <returns>A list of <see cref="SearchIndexItems"/>.</returns>
         private IEnumerable<SearchIndexItem> ExtractItem(CQ cq, string relativePath)
         {
             var classHeader = cq["h1"].FirstElement().TextContent.Trim();
@@ -109,9 +129,9 @@ namespace DisCatSharp.DocFx.CustomMemberIndexer
             var headings = cq["h4"];
             foreach (var heading in headings)
             {
-                var nameSig = heading.TextContent.Trim(); // Unregister(AsyncEventHandler)
-                var id = heading.Id; // DSharpPlus_AsyncEvent_Unregister_DSharpPlus_AsyncEventHandler_
-                var uid = heading["data-uid"]; // DSharpPlus.AsyncEvent.Unregister(DSharpPlus.AsyncEventHandler)
+                var nameSig = heading.TextContent.Trim();
+                var id = heading.Id;
+                var uid = heading["data-uid"];
 
                 string summary = null;
                 {
@@ -132,12 +152,12 @@ namespace DisCatSharp.DocFx.CustomMemberIndexer
 
                     switch (sibling.Id)
                     {
-                        case "classes": // continue the outer loop, classes are handled by the existing indexer?
-                        case "structs": // ^ same as above?
-                        case "enums": // ^ same as above?
-                        case "interfaces": // ^ same as above?
-                        case "delegates": // ^ same thing here i think?
-                        case "aliases": // continue the outer loop, aliases are handled in the base item
+                        case "classes":
+                        case "structs":
+                        case "enums":
+                        case "interfaces":
+                        case "delegates":
+                        case "aliases":
                             continue;
                         case "operators":
                             itemType = "Operator";
@@ -165,8 +185,6 @@ namespace DisCatSharp.DocFx.CustomMemberIndexer
                     }
                 }
 
-
-                // summary, conceptual, decalaration (sic), parameters, etc
                 var keywords = new List<string>();
                 string aliases = null;
                 
@@ -194,7 +212,7 @@ namespace DisCatSharp.DocFx.CustomMemberIndexer
 
                 var title = itemType == "Constructor" 
                     ? $"Constructor {nameSig}"
-                    : $"{itemType} {AllWords.Match(nameSig).Value} in {classHeader}"; // AllWords.Match to get 1st value
+                    : $"{itemType} {AllWords.Match(nameSig).Value} in {classHeader}";
                 if (aliases != null) title += $" (like {aliases})";
 
                 yield return new SearchIndexItem
