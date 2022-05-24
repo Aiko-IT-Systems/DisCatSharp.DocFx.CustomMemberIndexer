@@ -42,9 +42,7 @@ namespace DisCatSharp.DocFx.CustomMemberIndexer
         /// </summary>
         /// <param name="obj">The object.</param>
         public override bool Equals(object obj)
-        {
-            return this.Equals(obj as SearchIndexItem);
-        }
+            => Equals(obj as SearchIndexItem);
 
         /// <summary>
         /// Whether an <see cref="SearchIndexItem"/> is equal to this <see cref="SearchIndexItem"/>.
@@ -56,15 +54,13 @@ namespace DisCatSharp.DocFx.CustomMemberIndexer
                 return false;
             if (ReferenceEquals(this, other))
                 return true;
-            return string.Equals(this.Title, other.Title) && string.Equals(this.Href, other.Href) && string.Equals(this.Keywords, other.Keywords);
+            return string.Equals(Title, other.Title) && string.Equals(Href, other.Href) && string.Equals(Keywords, other.Keywords);
         }
 
         /// <summary>
         /// Gets the hash code.
         /// </summary>
         public override int GetHashCode()
-        {
-            return Title.GetHashCode() ^ Href.GetHashCode() ^ Keywords.GetHashCode();
-        }
+            => Title.GetHashCode() ^ Href.GetHashCode() ^ Keywords.GetHashCode();
     }
 }

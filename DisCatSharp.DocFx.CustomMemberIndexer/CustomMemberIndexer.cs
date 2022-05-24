@@ -1,3 +1,10 @@
+using CsQuery;
+
+using Microsoft.DocAsCode.Common;
+using Microsoft.DocAsCode.Plugins;
+
+using Newtonsoft.Json;
+
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -6,10 +13,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using CsQuery;
-using Microsoft.DocAsCode.Common;
-using Microsoft.DocAsCode.Plugins;
-using Newtonsoft.Json;
 
 namespace DisCatSharp.DocFx.CustomMemberIndexer
 {
@@ -53,10 +56,8 @@ namespace DisCatSharp.DocFx.CustomMemberIndexer
                 
                 try
                 {
-                    using (var stream = EnvironmentContext.FileAbstractLayer.OpenRead(filePath))
-                    {
-                        cq = CQ.Create(stream, Encoding.UTF8);
-                    }
+                    using var stream = EnvironmentContext.FileAbstractLayer.OpenRead(filePath);
+                    cq = CQ.Create(stream, Encoding.UTF8);
                 }
                 catch (Exception ex)
                 {
@@ -65,9 +66,7 @@ namespace DisCatSharp.DocFx.CustomMemberIndexer
 
                 var summaryElement = cq["h1 + div.summary"].FirstOrDefault();
                 if (summaryElement != null)
-                {
                     item.Summary = summaryElement.TextContent;
-                }
             }
             
             var htmlFiles = (
@@ -77,12 +76,12 @@ namespace DisCatSharp.DocFx.CustomMemberIndexer
                 where output.Key.Equals(".html", StringComparison.OrdinalIgnoreCase)
                 select output.Value.RelativePath
             ).ToArray();
+            
             if (htmlFiles.Length == 0)
-            {
                 return manifest;
-            }
 
             Console.WriteLine($"[DC#] Extracting method index data from {htmlFiles.Length} html files");
+            
             foreach (var relativePath in htmlFiles)
             {
                 var filePath = Path.Combine(outputFolder, relativePath);
@@ -93,10 +92,8 @@ namespace DisCatSharp.DocFx.CustomMemberIndexer
                 
                 try
                 {
-                    using (var stream = EnvironmentContext.FileAbstractLayer.OpenRead(filePath))
-                    {
-                        cq = CQ.Create(stream, Encoding.UTF8);
-                    }
+                    using var stream = EnvironmentContext.FileAbstractLayer.OpenRead(filePath);
+                    cq = CQ.Create(stream, Encoding.UTF8);
                 }
                 catch (Exception ex)
                 {
@@ -105,9 +102,7 @@ namespace DisCatSharp.DocFx.CustomMemberIndexer
                 }
                 var indexItems = ExtractItem(cq, relativePath);
                 foreach (var item in indexItems)
-                {
                     indexData[item.Href] = item;
-                }
             }
             JsonUtility.Serialize(indexDataFilePath, indexData, Formatting.Indented);
             
@@ -137,18 +132,14 @@ namespace DisCatSharp.DocFx.CustomMemberIndexer
                 {
                     var summaryElement = heading.NextElementSibling;
                     if (summaryElement.Classes.Contains("summary"))
-                    {
                         summary = summaryElement.TextContent.Trim();
-                    }
                 }
 
                 string itemType = null;
                 {
                     var sibling = heading.PreviousElementSibling;
                     while (sibling.NodeName.ToLowerInvariant() != "h3")
-                    {
                         sibling = sibling.PreviousElementSibling;
-                    }
 
                     switch (sibling.Id)
                     {
@@ -191,21 +182,15 @@ namespace DisCatSharp.DocFx.CustomMemberIndexer
                 for (var sibling = heading.NextElementSibling;
                     sibling != null && sibling.NodeName.ToLowerInvariant() != "h4";
                     sibling = sibling.NextElementSibling)
-                {
                     foreach (Match match in AllWords.Matches(sibling.TextContent.Trim()))
-                    {
                         keywords.Add(match.Value);
-                    }
-                }
 
                 {
                     var sibling = heading.NextElementSibling;
-                    while (sibling != null && sibling.Id != id + "_aliases") sibling = sibling.NextElementSibling;
+                    while (sibling != null && sibling.Id != id + "_aliases") 
+                        sibling = sibling.NextElementSibling;
                     if (sibling != null)
-                    {
-                        var aliasesSection = sibling.NextElementSibling;
-                        aliases = aliasesSection.TextContent.Trim();
-                    }
+                        aliases = sibling.NextElementSibling.TextContent.Trim();
                 }
                 
                 var idSpaced = id.Replace('_', ' ').Trim();
@@ -213,7 +198,8 @@ namespace DisCatSharp.DocFx.CustomMemberIndexer
                 var title = itemType == "Constructor" 
                     ? $"Constructor {nameSig}"
                     : $"{itemType} {AllWords.Match(nameSig).Value} in {classHeader}";
-                if (aliases != null) title += $" (like {aliases})";
+                if (aliases != null) 
+                    title += $" (like {aliases})";
 
                 yield return new SearchIndexItem
                 {
