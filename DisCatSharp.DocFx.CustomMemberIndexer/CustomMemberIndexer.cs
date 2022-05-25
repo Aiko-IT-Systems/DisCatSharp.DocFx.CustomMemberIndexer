@@ -80,8 +80,9 @@ namespace DisCatSharp.DocFx.CustomMemberIndexer
             if (htmlFiles.Length == 0)
                 return manifest;
 
-            Console.WriteLine($"[DC#] Extracting method index data from {htmlFiles.Length} html files");
-            
+            Logger.LogInfo($"[DC#] Extracting method index data from {htmlFiles.Length} html files");
+
+
             foreach (var relativePath in htmlFiles)
             {
                 var filePath = Path.Combine(outputFolder, relativePath);
@@ -97,7 +98,7 @@ namespace DisCatSharp.DocFx.CustomMemberIndexer
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"[DC#] Warning: Can't load content from {filePath}: {ex.Message}");
+                    Logger.LogWarning($"[DC#] Warning: Can't load content from {filePath}: {ex.Message}");
                     continue;
                 }
                 var indexItems = ExtractItem(cq, relativePath);
