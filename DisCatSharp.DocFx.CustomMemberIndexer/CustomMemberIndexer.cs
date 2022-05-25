@@ -56,8 +56,8 @@ namespace DisCatSharp.DocFx.CustomMemberIndexer
                 
                 try
                 {
-                    using var stream = EnvironmentContext.FileAbstractLayer.OpenRead(filePath);
-                    cq = CQ.Create(stream, Encoding.UTF8);
+                    using (var stream = EnvironmentContext.FileAbstractLayer.OpenRead(filePath))
+                        cq = CQ.Create(stream, Encoding.UTF8);
                 }
                 catch (Exception ex)
                 {
@@ -93,8 +93,8 @@ namespace DisCatSharp.DocFx.CustomMemberIndexer
                 
                 try
                 {
-                    using var stream = EnvironmentContext.FileAbstractLayer.OpenRead(filePath);
-                    cq = CQ.Create(stream, Encoding.UTF8);
+                    using (var stream = EnvironmentContext.FileAbstractLayer.OpenRead(filePath))
+                        cq = CQ.Create(stream, Encoding.UTF8);
                 }
                 catch (Exception ex)
                 {
