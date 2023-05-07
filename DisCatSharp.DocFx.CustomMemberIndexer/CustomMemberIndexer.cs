@@ -115,7 +115,7 @@ public class CustomMemberIndexer : IPostProcessor
     /// </summary>
     /// <param name="cq">The cq.</param>
     /// <param name="relativePath">The relative path.</param>
-    /// <returns>A list of <see cref="SearchIndexItems"/>.</returns>
+    /// <returns>A list of <see cref="SearchIndexItem"/>.</returns>
     private IEnumerable<SearchIndexItem> ExtractItem(CQ cq, string relativePath)
     {
         var classHeader = cq["h1"].FirstElement().TextContent.Trim();
