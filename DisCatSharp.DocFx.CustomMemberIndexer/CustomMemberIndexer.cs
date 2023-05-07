@@ -56,9 +56,9 @@ namespace DisCatSharp.DocFx.CustomMemberIndexer
                 
                 try
                 {
-                    using (var stream = EnvironmentContext.FileAbstractLayer.OpenRead(filePath))
-                        cq = CQ.Create(stream, Encoding.UTF8);
-                }
+					using var stream = EnvironmentContext.FileAbstractLayer.OpenRead(filePath);
+					cq = CQ.Create(stream, Encoding.UTF8);
+				}
                 catch (Exception ex)
                 {
                     throw new InvalidOperationException($"Can't load content from existing item {filePath}", ex);
@@ -93,9 +93,9 @@ namespace DisCatSharp.DocFx.CustomMemberIndexer
                 
                 try
                 {
-                    using (var stream = EnvironmentContext.FileAbstractLayer.OpenRead(filePath))
-                        cq = CQ.Create(stream, Encoding.UTF8);
-                }
+					using var stream = EnvironmentContext.FileAbstractLayer.OpenRead(filePath);
+					cq = CQ.Create(stream, Encoding.UTF8);
+				}
                 catch (Exception ex)
                 {
                     Logger.LogWarning($"Can't load content from {filePath}: {ex.Message}");
@@ -110,7 +110,7 @@ namespace DisCatSharp.DocFx.CustomMemberIndexer
             return manifest;
         }
         
-        private static readonly Regex AllWords = new Regex(@"\w+", RegexOptions.Compiled);
+        private static readonly Regex AllWords = new(@"\w+", RegexOptions.Compiled);
 
         /// <summary>
         /// Extracts the item.
@@ -183,7 +183,7 @@ namespace DisCatSharp.DocFx.CustomMemberIndexer
                 for (var sibling = heading.NextElementSibling;
                     sibling != null && sibling.NodeName.ToLowerInvariant() != "h4";
                     sibling = sibling.NextElementSibling)
-                    foreach (Match match in AllWords.Matches(sibling.TextContent.Trim()))
+                    foreach (Match match in AllWords.Matches(sibling.TextContent.Trim()).Cast<Match>())
                         keywords.Add(match.Value);
 
                 {
