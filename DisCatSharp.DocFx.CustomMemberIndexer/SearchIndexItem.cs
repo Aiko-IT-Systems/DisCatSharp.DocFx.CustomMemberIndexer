@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace DisCatSharp.DocFx.CustomMemberIndexer
+namespace CustomMemberIndexer
 {
     /// <summary>
     /// The search index item.

@@ -3,8 +3,17 @@
     <PropertyGroup>
         <TargetFrameworks>net7.0</TargetFrameworks>
         <NoWarn>NU1605</NoWarn>
-        <AssemblyName>DisCatSharp.DocFx.CustomMemberIndexer</AssemblyName>
-        <RootNamespace>DisCatSharp.DocFx.CustomMemberIndexer</RootNamespace>
+        <AssemblyName>CustomMemberIndexer</AssemblyName>
+        <RootNamespace>CustomMemberIndexer</RootNamespace>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0|AnyCPU'">
+      <DebugType>embedded</DebugType>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0|AnyCPU'">
+      <DebugType>embedded</DebugType>
     </PropertyGroup>
 
     <ItemGroup>
@@ -12,7 +21,6 @@
       <PackageReference Include="Microsoft.Composition" Version="1.0.31" />
       <PackageReference Include="Microsoft.DocAsCode.Common" Version="2.67.0" />
       <PackageReference Include="Microsoft.DocAsCode.Plugins" Version="2.67.0" />
-      <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     </ItemGroup>
 
 </Project>
